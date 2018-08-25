@@ -1,6 +1,7 @@
 // Script Initializations
-require("dotenv").config();
-require("./keys.js");
+require('dotenv').config()
+var Spotify = require('node-spotify-api');
+var keys = require("./keys.js");
 
 var fs = require("fs");
 var request = require("request");
@@ -38,8 +39,11 @@ function concertThis() {
 
         // If the request is successful
         if (!error && response.statusCode === 200) {
+            var data = JSON.parse(body);
 
-            console.log(JSON.parse(body).venue);
+            for (var key of data.keys()) {
+                console.log(key)
+            }
         }
     });
 }
@@ -47,4 +51,16 @@ function concertThis() {
 //Spotify Function Definition
 function spotifyThisSong() {
 
+    var spotify = new Spotify({
+        id: process.env.SPOTIFY_ID,
+        secret: process.env.SPOTIFY_SECRET
+    });
+
+    spotify.search({ type: 'track', query: input, limit: 1 }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        var artistName = data.tracks;
+        console.log(artistName);
+    });
 }
