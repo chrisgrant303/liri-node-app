@@ -1,15 +1,16 @@
 // Script Initializations
 require("dotenv").config();
+require("./keys.js");
 
-var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
 var request = require("request");
 var moment = require("moment");
 
-
 // Defining variables to extract information from the command line inputs and then save it
 var command = process.argv[2];
 var input = process.argv[3];
+
+var bandsURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp"
 
 // Defining what functions should be run using switch/case - relevant to the command line inputs
 switch (command) {
@@ -30,5 +31,20 @@ switch (command) {
         break;
 }
 
+// Bands in Town Function Definition
+function concertThis() {
+    console.log(bandsURL);
+    request(bandsURL, function (error, response, body) {
 
+        // If the request is successful
+        if (!error && response.statusCode === 200) {
 
+            console.log(JSON.parse(body).venue);
+        }
+    });
+}
+
+//Spotify Function Definition
+function spotifyThisSong() {
+
+}
