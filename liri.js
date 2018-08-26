@@ -11,7 +11,7 @@ var moment = require("moment");
 var command = process.argv[2];
 var input = process.argv[3];
 
-var bandsURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp"
+var bandsURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp&date=2018-08-25%2C2018-09-01"
 
 // Defining what functions should be run using switch/case - relevant to the command line inputs
 switch (command) {
@@ -40,10 +40,7 @@ function concertThis() {
         // If the request is successful
         if (!error && response.statusCode === 200) {
             var data = JSON.parse(body);
-
-            for (var key of data.keys()) {
-                console.log(key)
-            }
+            console.log(data);
         }
     });
 }
@@ -60,7 +57,18 @@ function spotifyThisSong() {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-        var artistName = data.tracks;
-        console.log(artistName);
+        var artistInfo = data.tracks.items;
+
+        console.log("Artist Name: " + (artistInfo[0].artists[0].name))
+        console.log;
+        console.log(artistInfo[0].external_urls)
+        console.log(artistInfo[0].album.name);
+
+
     });
+}
+
+//OMDB Function Definition
+function movieThis() {
+
 }
