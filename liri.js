@@ -70,12 +70,13 @@ function spotifyThisSong() {
         var artistInfo = data.tracks.items;
 
         console.log("Artist Name: " + (artistInfo[0].artists[0].name) + " \n" +
-            "Click Here For More: " + (artistInfo[0].external_urls) + " \n" +
+            "Click Here For More: " + (JSON.stringify(artistInfo[0].external_urls)) + " \n" +
             "Album Name: " + (artistInfo[0].album.name));
     });
 }
 
-//OMDB Function Definition
+//OMDB Function Definition -- This works great except that I am having difficulties anytime the movie query is more than (2) words.  I've tried the for-loop from the activities but can't get it to register correctly!
+
 function movieThis() {
     request(queryUrl, function (error, response, body) {
         // If the request is successful
@@ -98,3 +99,14 @@ function movieThis() {
         }
     });
 }
+
+//Do What I Say Function Definition
+function doWhatItSays() {
+    fs.readFile("./random.txt", "utf8", function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        var content = data.split(",");
+        console.log(content[1]);
+    })
+}; // This is the only one that I can't seem to figure out!!
