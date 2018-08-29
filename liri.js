@@ -46,12 +46,12 @@ function concertThis() {
         // If the request is successful
         if (!error && response.statusCode === 200) {
             var data = JSON.parse(body);
-            var date = data[0].datetime;
+            var date = moment(data[0].datetime).format('MMMM Do YYYY');
 
-            console.log("You searched for " + input + ",and the soonest event coming up is: " + "\n" +
+            console.log("You searched for " + input + ", and the soonest event coming up is: " + "\n" +
                 "Venue Name: " + (data[0].venue.name) + "\n" +
                 "Venue Location: " + (data[0].venue.city) + "\n" +
-                "Event Date: " + date);
+                "Event Date: " + (date));
         };
     });
 }
@@ -86,9 +86,6 @@ function movieThis() {
     request(queryUrl, function (error, response, body) {
         // If the request is successful
         if (!error && response.statusCode === 200) {
-
-            // var dateToConvert = moment((JSON.parse(body).Released)).format("MMM Do YY");
-            // console.log(dateToConvert);
 
             // Parse the body of the site and recover just the imdbRating
             // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
