@@ -10,7 +10,7 @@ var moment = require("moment");
 
 // Defining variables to extract information from the command line inputs and then save it
 var command = process.argv[2];
-var input = process.argv[3];
+var input = process.argv.slice(3).join(" ");
 
 var bandsURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp&date=2018-08-25%2C2018-09-01"
 
@@ -46,12 +46,13 @@ function concertThis() {
         // If the request is successful
         if (!error && response.statusCode === 200) {
             var data = JSON.parse(body);
+            var date = data[0].datetime;
 
             console.log("You searched for " + input + ",and the soonest event coming up is: " + "\n" +
                 "Venue Name: " + (data[0].venue.name) + "\n" +
                 "Venue Location: " + (data[0].venue.city) + "\n" +
-                "Event Date: " + (data[0].datetime));
-        }
+                "Event Date: " + date);
+        };
     });
 }
 
@@ -63,7 +64,11 @@ function spotifyThisSong() {
         secret: process.env.SPOTIFY_SECRET
     });
 
-    spotify.search({ type: 'track', query: input, limit: 1 }, function (err, data) {
+    spotify.search({
+        type: 'track',
+        query: input,
+        limit: 1
+    }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
