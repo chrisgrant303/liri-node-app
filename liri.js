@@ -10,7 +10,7 @@ var moment = require("moment");
 
 // Defining variables to extract information from the command line inputs and then save it
 var command = process.argv[2];
-var input = process.argv.slice(3).join(" ");
+var input = process.argv[3];
 
 var bandsURL = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp&date=2018-08-25%2C2018-09-01"
 
@@ -46,13 +46,12 @@ function concertThis() {
         // If the request is successful
         if (!error && response.statusCode === 200) {
             var data = JSON.parse(body);
-            var date = moment(data[0].datetime).format('MMMM Do YYYY');
 
-            console.log("You searched for " + input + ", and the soonest event coming up is: " + "\n" +
+            console.log("You searched for " + input + ",and the soonest event coming up is: " + "\n" +
                 "Venue Name: " + (data[0].venue.name) + "\n" +
                 "Venue Location: " + (data[0].venue.city) + "\n" +
-                "Event Date: " + (date));
-        };
+                "Event Date: " + (data[0].datetime));
+        }
     });
 }
 
@@ -64,31 +63,23 @@ function spotifyThisSong() {
         secret: process.env.SPOTIFY_SECRET
     });
 
-    spotify.search({
-        type: 'track',
-        query: input,
-        limit: 1
-    }, function (err, data) {
+    spotify.search({ type: 'track', query: input, limit: 1 }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
         var artistInfo = data.tracks.items;
 
         console.log("Artist Name: " + (artistInfo[0].artists[0].name) + " \n" +
-            "Click Here For More: " + (JSON.stringify(artistInfo[0].external_urls)) + " \n" +
+            "Click Here For More: " + (JSON.stringify(artistInfo[0].external_urls)) + " \n" + //I tried to remove the "spotify" from the console print but was unable
             "Album Name: " + (artistInfo[0].album.name));
     });
 }
-
-//OMDB Function Definition -- This works great except that I am having difficulties anytime the movie query is more than (2) words.  I've tried the for-loop from the activities but can't get it to register correctly!
 
 function movieThis() {
     request(queryUrl, function (error, response, body) {
         // If the request is successful
         if (!error && response.statusCode === 200) {
 
-            // Parse the body of the site and recover just the imdbRating
-            // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
             console.log("LIRI SUPER SPECIAL MOVIE DATABASE MANAGER" + "\n" +
                 "Movie Title: " + (JSON.parse(body).Title) + "\n" +
                 "Release Year: " + (JSON.parse(body).Released) + "\n" +
@@ -109,6 +100,11 @@ function doWhatItSays() {
             return console.log('Error occurred: ' + err);
         }
         var content = data.split(",");
-        console.log(content[1]);
-    })
-}; // This is the only one that I can't seem to figure out!!
+
+        var consoleCommand = content[0].split('* ').join('');
+        var consoleInput = content[1];
+
+        console.log(consoleCommand);
+        console.log(consoleInput);
+    }) // I'm so close to figuring out how to call the Spotify function from here but am not quite there yet!!
+}; 
